@@ -4,16 +4,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Livro {
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
+
     @NotBlank(message = "titulo é fundamental")
     private String titulo;
-    @NotBlank(message = "quantidade é fundamental")
+
+    @NotNull(message = "A quantidade é obrigatória")
+    @Min(value = 1, message = "A quantidade deve ser maior ou igual a 1")
     private Integer quantidade;
 
     public Livro(Long id, String titulo, Integer quantidade) {
