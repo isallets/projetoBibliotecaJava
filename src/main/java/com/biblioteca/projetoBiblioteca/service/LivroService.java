@@ -15,12 +15,12 @@ public class LivroService {
     @Autowired
     private LivroRepository livroRepository;
 
-    public Livro salvarLivro(Livro livro) {
+    public Livro criarLivro(Livro livro) {
         return livroRepository.save(livro);
     }
 
     @Transactional
-    public Livro atualizarQuantidade(Long id, Integer quantidadeAdicionar) {
+    public Livro atualizarQuantidadeLivro(Long id, Integer quantidadeAdicionar) {
         Livro livroExistente = livroRepository.findById(id).orElseThrow(() -> new RuntimeException("Livro não encontrado com ID " + id));
 
         livroExistente.setQuantidade(livroExistente.getQuantidade() + quantidadeAdicionar);
@@ -28,15 +28,15 @@ public class LivroService {
         return livroRepository.save(livroExistente);
     }
 
-    public List<Livro> listarTodos() {
+    public List<Livro> listarTodosLivros() {
         return livroRepository.findAll();
     }
 
-    public Optional<Livro> buscarPorId(Long id) {
+    public Optional<Livro> buscarLivroPorId(Long id) {
         return livroRepository.findById(id);
     }
 
-    public void deletarPorId(Long id) {
+    public void deletarLivroPorId(Long id) {
         livroRepository.deleteById(id);
     }
 }
