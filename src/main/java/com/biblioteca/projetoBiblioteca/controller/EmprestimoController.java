@@ -1,6 +1,7 @@
 package com.biblioteca.projetoBiblioteca.controller;
 
-import com.biblioteca.projetoBiblioteca.model.Emprestimo;
+import com.biblioteca.projetoBiblioteca.dto.EmprestimoRequestDTO;
+import com.biblioteca.projetoBiblioteca.dto.EmprestimoResponseDTO;
 import com.biblioteca.projetoBiblioteca.service.EmprestimoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,24 +16,18 @@ public class EmprestimoController {
     @Autowired
     private EmprestimoService emprestimoService;
 
-    @GetMapping
-    public List<Emprestimo> listarTodos() {
-        return emprestimoService.listarTodos();
-    }
-
     @PostMapping
-    public ResponseEntity<Emprestimo> salvar(@RequestBody Emprestimo emprestimo) {
-        return ResponseEntity.ok(emprestimoService.salvar(emprestimo));
+    public ResponseEntity<EmprestimoResponseDTO> criarEmprestimo(@RequestBody EmprestimoRequestDTO emprestimoRequestDTO) {
+        try {
+            EmprestimoResponseDTO emprestimo = emprestimoService.criarEmprestimo(emprestimoRequestDTO);
+            return ResponseEntity.ok(emprestimo);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Emprestimo> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(emprestimoService.buscarPorId(id));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        emprestimoService.deletar(id);
-        return ResponseEntity.noContent().build();
+    @GetMapping
+    public List<EmprestimoResponseDTO> listarEmprestimos() {
+        return emprestimoService.listarEmprestimos();
     }
 }

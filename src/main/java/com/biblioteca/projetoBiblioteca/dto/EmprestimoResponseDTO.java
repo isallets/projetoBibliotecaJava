@@ -1,29 +1,17 @@
-package com.biblioteca.projetoBiblioteca.model;
+package com.biblioteca.projetoBiblioteca.dto;
 
-import jakarta.persistence.*;
+import com.biblioteca.projetoBiblioteca.model.Livro;
+
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
-public class Emprestimo {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class EmprestimoResponseDTO {
     private Long id;
-
     private LocalDate dataEmprestimo;
-
-    @ManyToMany
-    @JoinTable(
-            name = "emprestimo_livro",
-            joinColumns = @JoinColumn(name = "emprestimo_id"),
-            inverseJoinColumns = @JoinColumn(name = "livro_id")
-    )
     private List<Livro> livros;
 
-    public Emprestimo() {}
-
-    public Emprestimo(LocalDate dataEmprestimo, List<Livro> livros) {
+    public EmprestimoResponseDTO(Long id, LocalDate dataEmprestimo, List<Livro> livros) {
+        this.id = id;
         this.dataEmprestimo = dataEmprestimo;
         this.livros = livros;
     }

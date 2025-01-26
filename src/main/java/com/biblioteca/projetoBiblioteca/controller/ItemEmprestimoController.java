@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/itensEmprestimo")
+@RequestMapping("/itemEmprestimos")
 public class ItemEmprestimoController {
 
     @Autowired
@@ -20,19 +20,15 @@ public class ItemEmprestimoController {
         return itemEmprestimoService.listarTodos();
     }
 
-    @PostMapping
-    public ResponseEntity<ItemEmprestimo> salvar(@RequestBody ItemEmprestimo itemEmprestimo) {
-        return ResponseEntity.ok(itemEmprestimoService.salvar(itemEmprestimo));
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<ItemEmprestimo> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(itemEmprestimoService.buscarPorId(id));
+        ItemEmprestimo itemEmprestimo = itemEmprestimoService.buscarPorId(id);
+        return itemEmprestimo != null ? ResponseEntity.ok(itemEmprestimo) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        itemEmprestimoService.deletar(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deletarPorId(@PathVariable Long id) {
+        boolean deletado = itemEmprestimoService.deletarPorId(id);
+        return deletado ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }

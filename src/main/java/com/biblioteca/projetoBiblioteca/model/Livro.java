@@ -14,11 +14,11 @@ public class Livro {
     @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotBlank(message = "titulo é fundamental")
+    @NotBlank(message = "Titulo é obrigatório")
     private String titulo;
 
     @NotNull(message = "A quantidade é obrigatória")
-    @Min(value = 1, message = "A quantidade deve ser maior ou igual a 1")
+    @Min(value = 1, message = "A quantidade deve ser no minimo 1")
     private Integer quantidade;
 
     public Livro(Long id, String titulo, Integer quantidade) {
