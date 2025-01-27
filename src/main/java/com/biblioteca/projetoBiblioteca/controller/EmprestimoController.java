@@ -30,4 +30,14 @@ public class EmprestimoController {
     public List<EmprestimoResponseDTO> listarEmprestimos() {
         return emprestimoService.listarEmprestimos();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarEmprestimo(@PathVariable Long id) {
+        try {
+            emprestimoService.deletarEmprestimo(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

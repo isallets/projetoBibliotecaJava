@@ -71,4 +71,19 @@ public class EmprestimoService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public void deletarEmprestimo(Long id) {
+        // Verifica se o empréstimo existe
+        Emprestimo emprestimo = emprestimoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Empréstimo com ID " + id + " não encontrado"));
+
+        // Restaura a quantidade dos livros
+        emprestimo.getLivros().forEach(livro -> {
+            livro.setQuantidade(livro.getQuantidade() + 1); // Incrementa a quantidade
+            livroRepository.save(livro); // Salva as alterações no banco
+        });
+
+        // Remove o empréstimo
+        emprestimoRepository.delete(emprestimo);
+    }
 }

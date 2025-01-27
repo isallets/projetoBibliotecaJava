@@ -22,7 +22,7 @@ public class ItemEmprestimoService {
         Optional<ItemEmprestimo> itemEmprestimo = itemEmprestimoRepository.findById(id);
         return itemEmprestimo.orElse(null);
     }
-
+/*
     public boolean deletarPorId(Long id) {
         if (itemEmprestimoRepository.existsById(id)) {
             itemEmprestimoRepository.deleteById(id);
@@ -30,4 +30,5 @@ public class ItemEmprestimoService {
         }
         return false;
     }
+ */
 }

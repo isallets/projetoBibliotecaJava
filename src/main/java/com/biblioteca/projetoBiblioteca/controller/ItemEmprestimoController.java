@@ -25,10 +25,11 @@ public class ItemEmprestimoController {
         ItemEmprestimo itemEmprestimo = itemEmprestimoService.buscarPorId(id);
         return itemEmprestimo != null ? ResponseEntity.ok(itemEmprestimo) : ResponseEntity.notFound().build();
     }
-
+/*
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarPorId(@PathVariable Long id) {
         boolean deletado = itemEmprestimoService.deletarPorId(id);
         return deletado ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
+ */
 }
