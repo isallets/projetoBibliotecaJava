@@ -31,6 +31,19 @@ public class EmprestimoController {
         return emprestimoService.listarEmprestimos();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<EmprestimoResponseDTO> atualizarEmprestimo(
+            @PathVariable Long id,
+            @RequestBody List<Long> novosLivrosIds
+    ) {
+        try {
+            EmprestimoResponseDTO emprestimoAtualizado = emprestimoService.atualizarEmprestimo(id, novosLivrosIds);
+            return ResponseEntity.ok(emprestimoAtualizado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarEmprestimo(@PathVariable Long id) {
         try {
