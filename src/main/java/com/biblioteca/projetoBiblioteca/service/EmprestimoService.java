@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EmprestimoService {
@@ -27,33 +26,23 @@ public class EmprestimoService {
     private ItemEmprestimoRepository itemEmprestimoRepository;
 
     public EmprestimoResponseDTO criarEmprestimo(EmprestimoRequestDTO requestDTO) {
-        // Recuperar os livros pelo ID
-        List<Livro> livros = requestDTO.getLivrosIds().stream()
-                .map(id -> livroRepository.findById(id).orElseThrow(
-                        () -> new IllegalArgumentException("Livro com ID " + id + " não encontrado")
-                ))
-                .collect(Collectors.toList());
+        List<Livro> livros = requestDTO.getLivrosIds().stream().map(id -> livroRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Livro com ID " + id + " não encontrado"))).toList();
 
-        // Validar quantidade e atualizar o estoque
         livros.forEach(livro -> {
             if (livro.getQuantidade() <= 0) {
                 throw new IllegalArgumentException("O livro " + livro.getTitulo() + " está fora de estoque");
-            }
-            livro.setQuantidade(livro.getQuantidade() - 1);
+            }livro.setQuantidade(livro.getQuantidade() - 1);
             livroRepository.save(livro);
         });
 
-        // Criar e salvar o empréstimo
         Emprestimo emprestimo = new Emprestimo(requestDTO.getDataEmprestimo(), livros);
         Emprestimo savedEmprestimo = emprestimoRepository.save(emprestimo);
 
-        // Criar e salvar itens do empréstimo
         livros.forEach(livro -> {
             ItemEmprestimo itemEmprestimo = new ItemEmprestimo(livro.getId(), savedEmprestimo.getId());
             itemEmprestimoRepository.save(itemEmprestimo);
         });
 
-        // Retornar o DTO do empréstimo
         return new EmprestimoResponseDTO(
                 savedEmprestimo.getId(),
                 savedEmprestimo.getDataEmprestimo(),
@@ -62,26 +51,21 @@ public class EmprestimoService {
     }
 
     public List<EmprestimoResponseDTO> listarEmprestimos() {
-        // Listar todos os empréstimos e converter para DTO
-        return emprestimoRepository.findAll().stream().map(emprestimo -> new EmprestimoResponseDTO(
-                        emprestimo.getId(), emprestimo.getDataEmprestimo(), emprestimo.getLivros()
-                )).collect(Collectors.toList());
+        return emprestimoRepository.findAll().stream().map(emprestimo -> new EmprestimoResponseDTO(emprestimo.getId(), emprestimo.getDataEmprestimo(), emprestimo.getLivros())).toList();
     }
 
     public EmprestimoResponseDTO atualizarEmprestimo(Long emprestimoId, List<Long> novosLivrosIds) {
-        // Buscar o empréstimo existente
         Emprestimo emprestimo = emprestimoRepository.findById(emprestimoId).orElseThrow(() -> new IllegalArgumentException("Empréstimo com ID " + emprestimoId + " não encontrado"));
-        // Buscar os livros a serem adicionados
+
         List<Livro> novosLivros = novosLivrosIds.stream().map(id -> livroRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Livro com ID " + id + " não encontrado"))).toList();
-        // Atualizar a quantidade dos livros e salvar
+
         novosLivros.forEach(livro -> {
             if (livro.getQuantidade() <= 0) {
                 throw new IllegalArgumentException("O livro " + livro.getTitulo() + " está fora de estoque");
-            }
-            livro.setQuantidade(livro.getQuantidade() - 1);
+            }livro.setQuantidade(livro.getQuantidade() - 1);
             livroRepository.save(livro);
         });
-        // Adicionar os novos livros ao empréstimo
+
         emprestimo.getLivros().addAll(novosLivros);
         Emprestimo emprestimoAtualizado = emprestimoRepository.save(emprestimo);
 
@@ -93,16 +77,13 @@ public class EmprestimoService {
     }
 
     public void deletarEmprestimo(Long id) {
-        // Verifica se o empréstimo existe
         Emprestimo emprestimo = emprestimoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Empréstimo com ID " + id + " não encontrado"));
 
-        // Restaura a quantidade dos livros
         emprestimo.getLivros().forEach(livro -> {
-            livro.setQuantidade(livro.getQuantidade() + 1); // Incrementa a quantidade
-            livroRepository.save(livro); // Salva as alterações no banco
+            livro.setQuantidade(livro.getQuantidade() + 1);
+            livroRepository.save(livro);
         });
 
-        // Remove o empréstimo
         emprestimoRepository.delete(emprestimo);
     }
 }

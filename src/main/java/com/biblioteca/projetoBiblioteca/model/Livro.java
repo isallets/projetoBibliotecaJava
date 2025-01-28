@@ -11,7 +11,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 @Entity
 public class Livro {
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "Titulo é obrigatório")
