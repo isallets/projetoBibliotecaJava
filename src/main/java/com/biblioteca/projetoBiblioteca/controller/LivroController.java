@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/livros")
@@ -37,17 +36,14 @@ public class LivroController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Livro> buscarPorId(@PathVariable Long id) {
-        Optional<Livro> livro = livroService.buscarLivroPorId(id);
-        return livro.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        Livro livro = livroService.buscarLivroPorId(id).orElseThrow(() -> new IllegalArgumentException("Livro com o id " + id + " não encontrado."));
+        return ResponseEntity.ok(livro);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarPorId(@PathVariable Long id) {
-        Optional<Livro> livro = livroService.buscarLivroPorId(id);
-        if (livro.isPresent()) {
+        Livro livro = livroService.buscarLivroPorId(id).orElseThrow(() -> new IllegalArgumentException("Livro com o id " + id + " não encontrado."));
             livroService.deletarLivroPorId(id);
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.notFound().build();
-    }
 }

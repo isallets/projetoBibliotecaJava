@@ -21,12 +21,6 @@ public class Livro {
     @Min(value = 1, message = "A quantidade deve ser no minimo 1")
     private Integer quantidade;
 
-    public Livro(Long id, String titulo, Integer quantidade) {
-        this.id = id;
-        this.titulo = titulo;
-        this.quantidade = quantidade;
-    }
-
     public Livro() {
 
     }
@@ -35,16 +29,8 @@ public class Livro {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getTitulo() {
         return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
     }
 
     public Integer getQuantidade() {
