@@ -4,9 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
 public class Livro {
@@ -18,7 +18,7 @@ public class Livro {
     private String titulo;
 
     @NotNull(message = "A quantidade é obrigatória")
-    @Min(value = 1, message = "A quantidade deve ser no minimo 1")
+    @PositiveOrZero(message = "A quantidade deve ser zero ou maior.")
     private Integer quantidade;
 
     public Livro() {

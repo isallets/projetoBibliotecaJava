@@ -2,7 +2,6 @@ package com.biblioteca.projetoBiblioteca.controller;
 
 import com.biblioteca.projetoBiblioteca.model.Livro;
 import com.biblioteca.projetoBiblioteca.service.LivroService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +22,11 @@ public class LivroController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Livro> atualizarQuantidade(@PathVariable Long id, @RequestBody @Valid Livro livroAtualizado) {
+    public ResponseEntity<Livro> atualizarQuantidade(@PathVariable Long id, @RequestBody Livro livroAtualizado) {
+        if (livroAtualizado.getQuantidade() == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
         Livro livro = livroService.atualizarQuantidadeLivro(id, livroAtualizado.getQuantidade());
         return ResponseEntity.ok(livro);
     }
