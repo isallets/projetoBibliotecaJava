@@ -69,6 +69,11 @@ public class EmprestimoService {
         emprestimo.getLivros().addAll(novosLivros);
         Emprestimo emprestimoAtualizado = emprestimoRepository.save(emprestimo);
 
+        novosLivros.forEach(livro -> {
+            ItemEmprestimo itemEmprestimo = new ItemEmprestimo(livro.getId(), emprestimoAtualizado.getId());
+            itemEmprestimoRepository.save(itemEmprestimo);
+        });
+
         return new EmprestimoResponseDTO(
                 emprestimoAtualizado.getId(),
                 emprestimoAtualizado.getDataEmprestimo(),

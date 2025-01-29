@@ -23,7 +23,12 @@ public class ItemEmprestimoController {
     @GetMapping("/{id}")
     public ResponseEntity<ItemEmprestimo> buscarPorId(@PathVariable Long id) {
         ItemEmprestimo itemEmprestimo = itemEmprestimoService.buscarPorId(id);
-        return itemEmprestimo != null ? ResponseEntity.ok(itemEmprestimo) : ResponseEntity.notFound().build();
+
+        if (itemEmprestimo != null) {
+            return ResponseEntity.ok(itemEmprestimo);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 /*
     @DeleteMapping("/{id}")
